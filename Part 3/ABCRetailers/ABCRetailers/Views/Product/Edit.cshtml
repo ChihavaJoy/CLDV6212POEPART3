@@ -1,0 +1,90 @@
+﻿@model ABCRetailers.Models.Product
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Edit Product";
+    var jordanTypes = ViewBag.JordanTypes as List<SelectListItem>;
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm p-4">
+        <div class="card-header bg-primary text-white text-center mb-4">
+            <h4><i class="fas fa-edit me-2"></i> Edit Product</h4>
+        </div>
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="RowKey" />
+            <input type="hidden" asp-for="ETag" />
+            <input type="hidden" asp-for="Timestamp" />
+            <input type="hidden" asp-for="ImageUrl" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="ProductName" class="form-label fw-bold"></label>
+                <input asp-for="ProductName" class="form-control" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label fw-bold"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Price" class="form-label fw-bold"></label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input asp-for="Price" class="form-control" step="0.01" min="0" />
+                    </div>
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StockAvailable" class="form-label fw-bold"></label>
+                    <input asp-for="StockAvailable" class="form-control" type="number" min="0" />
+                    <span asp-validation-for="StockAvailable" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PartitionKey" class="form-label fw-bold">Jordan Type</label>
+                <select asp-for="PartitionKey" class="form-select" asp-items="jordanTypes">
+                    <option value="">-- Select Jordan Type --</option>
+                </select>
+                <span asp-validation-for="PartitionKey" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Current Image</label>
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="@Model.ProductName" class="img-thumbnail mb-2" style="max-width:200px; max-height:200px;" />
+                }
+                else
+                {
+                    <div class="bg-light d-flex align-items-center justify-content-center mb-2" style="width:200px; height:200px;">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                }
+
+                <label for="imageFile" class="form-label fw-bold">Upload New Image (Optional)</label>
+                <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/*" />
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i> Update Product
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

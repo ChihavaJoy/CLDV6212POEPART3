@@ -1,0 +1,103 @@
+﻿@model ABCRetailers.Models.Order
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-receipt me-2"></i> Order Details</h2>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.RowKey" class="btn btn-primary me-2">
+            <i class="fas fa-edit me-1"></i> Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-list me-1"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Order Information -->
+    <div class="col-md-8">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0 fw-bold">Order Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="fw-bold">Order ID:</p>
+                        <p class="text-muted">@Model.OrderId</p>
+
+                        <p class="fw-bold">Customer:</p>
+                        <p class="text-muted">@Model.Username</p>
+
+                        <p class="fw-bold">Product:</p>
+                        <p class="text-muted">@Model.ProductName</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="fw-bold">Order Date:</p>
+                        <p class="text-muted">@Model.OrderDate.ToString("MMMM dd, yyyy")</p>
+
+                        <p class="fw-bold">Quantity:</p>
+                        <p class="text-muted">@Model.Quantity</p>
+
+                        <p class="fw-bold">Status:</p>
+                        @{
+                            string GetStatusBadgeClass(string status) => status?.ToLower() switch
+                            {
+                                "submitted" => "primary",
+                                "processing" => "info",
+                                "completed" => "success",
+                                "cancelled" => "danger",
+                                _ => "secondary"
+                            };
+                        }
+                        <span class="badge bg-@(GetStatusBadgeClass(Model.Status)) fs-6">
+                            @Model.Status
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing & System Info -->
+    <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h6 class="card-title mb-0 fw-bold">Pricing Details</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="fw-bold">Unit Price:</span>
+                    <span>@Model.UnitPrice.ToString("C")</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="fw-bold">Quantity:</span>
+                    <span>@Model.Quantity</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <strong>Total Price:</strong>
+                    <strong class="text-success">@Model.TotalPrice.ToString("C")</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h6 class="card-title mb-0 fw-bold">System Information</h6>
+            </div>
+            <div class="card-body">
+                <p class="fw-bold mb-1">Created:</p>
+                <p class="text-muted small">@Model.Timestamp?.ToString("MMM dd, yyyy HH:mm")</p>
+
+                <p class="fw-bold mb-1">Customer ID:</p>
+                <p class="text-muted small">@Model.CustomerId</p>
+
+                <p class="fw-bold mb-1">Product ID:</p>
+                <p class="text-muted small">@Model.ProductId</p>
+            </div>
+        </div>
+    </div>
+</div>
